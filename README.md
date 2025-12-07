@@ -9,22 +9,6 @@ A blockchain-based document authentication system using SHA-256 hashing.
 
 ## Installation
 
-### Option 1: Simple Installation (No Virtual Environment)
-
-1. **Clone or download this project**
-
-2. **Install Flask:**
-   ```bash
-   pip install flask
-   ```
-
-   Or use requirements.txt:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-### Option 2: With Virtual Environment (Recommended)
-
 1. **Clone or download this project**
 
 2. **Create virtual environment:**
@@ -44,11 +28,6 @@ A blockchain-based document authentication system using SHA-256 hashing.
 4. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
-   ```
-
-5. **When done, deactivate:**
-   ```bash
-   deactivate
    ```
 
 ## Running the Application
