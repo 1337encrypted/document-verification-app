@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 48rem;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        .header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-content h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-content p {
+            font-size: 0.875rem;
+            color: #666666;
+        }
+
+        .view-ledger-btn {
+            font-size: 0.8125rem;
+            color: #000000;
+            text-decoration: none;
+            background: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .view-ledger-btn:hover {
+            background: #e5e5e5;
+        }
+
+        .alert {
+            padding: 0.875rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            border: 1px solid;
+        }
+
+        .alert-success {
+            background: #0a0a0a;
+            color: #22c55e;
+            border-color: #1a1a1a;
+        }
+
+        .alert-error {
+            background: #0a0a0a;
+            color: #ef4444;
+            border-color: #1a1a1a;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 0.25rem;
+        }
+
+        .section-description {
+            font-size: 0.8125rem;
+            color: #666666;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #666666;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.625rem 0.75rem;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            color: #000000;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #000000;
+        }
+
+        input[type="text"]::placeholder {
+            color: #999999;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 3rem 1rem;
+            background: #fafafa;
+            border: 2px dashed #e5e5e5;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #666666;
+            font-size: 0.8125rem;
+        }
+
+        .file-input-label:hover {
+            border-color: #000000;
+            background: #f5f5f5;
+        }
+
+        .file-name {
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+            color: #666666;
+            padding: 0.5rem 0.75rem;
+            background: #fafafa;
+            border-radius: 0.25rem;
+            border: 1px solid #e5e5e5;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .btn:hover {
+            background: #1a1a1a;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>Certificate Verification System</h1>
+                <p>Blockchain-based document authentication</p>
+            </div>
+            <a href="/ledger" class="view-ledger-btn">View Ledger</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Add Certificate -->
+        <div class="card">
+            <div class="section-header">
+                <div class="section-title">Add Certificate</div>
+                <div class="section-description">Register a new certificate to the blockchain</div>
+            </div>
+
+            <form action="/add" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="add-file">Certificate File</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" name="file" id="add-file" required onchange="showFileName('add-file', 'add-file-name')">
+                        <label for="add-file" class="file-input-label">
+                            Click to choose file or drag and drop
+                        </label>
+                    </div>
+                    <div id="add-file-name" class="file-name" style="display:none;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Certificate Holder Name</label>
+                    <input type="text" name="name" id="name" placeholder="e.g., John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="issuer">Issuing Authority</label>
+                    <input type="text" name="issuer" id="issuer" placeholder="e.g., University of Technology" required>
+                </div>
+
+                <button type="submit" class="btn">Add to Blockchain</button>
+            </form>
+        </div>
+
+        <!-- Verify Certificate -->
+        <div class="card">
+            <div class="section-header">
+                <div class="section-title">Verify Certificate</div>
+                <div class="section-description">Check if a certificate exists in the blockchain</div>
+            </div>
+
+            <form action="/verify" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="verify-file">Certificate File</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" name="file" id="verify-file" required onchange="showFileName('verify-file', 'verify-file-name')">
+                        <label for="verify-file" class="file-input-label">
+                            Click to choose file or drag and drop
+                        </label>
+                    </div>
+                    <div id="verify-file-name" class="file-name" style="display:none;"></div>
+                </div>
+
+                <button type="submit" class="btn">Verify Certificate</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showFileName(inputId, displayId) {
+            const input = document.getElementById(inputId);
+            const display = document.getElementById(displayId);
+            if (input.files.length > 0) {
+                display.textContent = '📄 ' + input.files[0].name;
+                display.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
